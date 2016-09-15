@@ -1,13 +1,18 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="application">
   <head>
     <meta charset="utf-8">
     <title> Angular Js</title>
-    <script  src="angular.min.js">
-    <script  src="app.js">
-    </script>
+    <script  src="angular.min.js"></script>
+    <script  src="app.js"></script>
   </head>
   <body>
     <h1> My First Angular js App!</h1>
+    <div ng-controller = "listFood">
+        <input type="text" ng-model = "listOfFoodItems">
+        </input>
+        <button ng-click="checkListOfItems()">Check If Too Much</button>
+        <div ng-model="message">{{message}}</div>
+    </div>
   </body>
 </html>
