@@ -7,12 +7,10 @@
     <script  src="app.js"></script>
   </head>
   <body>
-    <h1> My First Angular js App!</h1>
     <div ng-controller = "listFood">
-        <input type="text" ng-model = "listOfFoodItems">
-        </input>
+        <input type="text" ng-model = "listOfFoodItems" ng-style="customStyle" required></input>
         <button ng-click="checkListOfItems()">Check If Too Much</button>
-        <div ng-model="message">{{message}}</div>
+        <div ng-model="message" ng-style="customStyle">{{message}}</div>
     </div>
   </body>
 </html>
