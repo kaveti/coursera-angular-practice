@@ -1,48 +1,71 @@
 (
   function(){
-    'use strict';
-    angular.module('application',[]).controller('listFood',listFood);
-
+    angular.module('app',[]).
+    controller('products',products).
+    controller('basket',basket).
+    service('productsInvService',productsInv);
     //   injecting scope object in listFood controller
-
-    listFood.$inject = ['$scope'];
-
-    function listFood($scope){
-      $scope.message = "";
-      $scope.customStyle = {};
-      $scope.checkListOfItems = function validateList() {
-        if(typeof $scope.listOfFoodItems !== "undefined"){
-            var items = $scope.listOfFoodItems.split(",");
-            var filteredItems = [];
-            items.forEach(function(data) {
-                if(!isEmpty(data)){
-                  filteredItems.push(data);
-                }
-            });
-            checkLength(items,filteredItems);
-        }else {
-              $scope.message = "Please enter data first";
-              $scope.customStyle.color = "red";
-      }
-    };
-
-    function checkLength(items,filteredItems){
-      if(filteredItems.length > 3){
-        $scope.message = "Too much!";
-        $scope.customStyle.color = "red";
-      }else{
-        $scope.message = "Enjoy!";
-        $scope.customStyle.color = "green";
-      }
-      if(filteredItems.length < 3 && items.length>=3){
-        $scope.message = "Please enter data! Not Empty OR Space comma separated items";
-        $scope.customStyle.color = "red";
-      }
+    products.$inject = ['productsInvService'];
+    function products(productsInvService){
+      var products = this;
+      products.items = productsInvService.getItems();
+      products.addToBasket = function(index){
+        productsInvService.addToBasket(index);
+      };
     }
 
-    function isEmpty(str) {
-        return str.replace(/^\s+|\s+$/g, '').length === 0;
+    basket.$inject = ['productsInvService'];
+    function basket(productsInvService){
+      var basket = this;
+      basket.items = productsInvService.getBasketItems();
+      basket.msg = productsInvService.getMessage();
     }
-  }
+
+  function productsInv(){
+      this.basket = [];
+      this.message = "Nothing bought yet.";
+      this.items = [
+          {
+             "name" : "cookies",
+             "quantity" : 10
+          },
+          {
+             "name" : "potato",
+             "quantity" : 12
+          },
+          {
+             "name" : "tomato",
+             "quantity" : 11
+          },
+          {
+             "name" : "ginger",
+             "quantity" : 1
+          },
+          {
+             "name" : "garlic",
+             "quantity" : 13
+          },
+          {
+             "name" : "biscuits",
+             "quantity" : 5
+          }
+      ];
+      this.getItems = function(){
+                          return this.items;
+                  }
+      this.getMessage = function(){
+                          return this.message;
+                  }
+      this.addToBasket = function(index){
+                   if(this.items.length >= 0){
+                     var item = this.items.splice(index,1);
+                     this.basket.push(item[0]);
+                     this.message = "";
+                   }
+              }
+        this.getBasketItems = function(){
+              return this.basket;
+        }
+      }
 }
 )();

@@ -1,16 +1,54 @@
-<!DOCTYPE html>
-<html ng-app="application">
+<!doctype html>
+<html lang="en"  ng-app="app">
   <head>
-    <meta charset="utf-8">
-    <title> Angular Js</title>
-    <script  src="angular.min.js"></script>
-    <script  src="app.js"></script>
+    <title>Shopping List Check Off</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="styles/bootstrap.min.css">
+    <script src="angular.min.js"></script>
+    <script src="app.js"></script>
+    <style>
+      .emptyMessage {
+        font-weight: bold;
+        color: red;
+        font-size: 1.2em;
+      }
+      li {
+        margin-bottom: 7px;
+        font-size: 1.2em;
+      }
+      li > button {
+        margin-left: 6px;
+      }
+      button > span {
+        color: green;
+      }
+    </style>
   </head>
-  <body>
-    <div ng-controller = "listFood">
-        <input type="text" ng-model = "listOfFoodItems" style="border-color:{{customStyle.color}};" required></input>
-        <button ng-click="checkListOfItems()">Check If Too Much</button>
-        <div ng-model="message" ng-style="customStyle">{{message}}</div>
+<body>
+  <div class="container">
+  <h1>Shopping List Check Off</h1>
+
+  <div class="row">
+
+    <!-- To Buy List -->
+    <div class="col-md-6" ng-controller="products as listOfFoodItems">
+     <h2>To Buy:</h2>
+     <ul ng-repeat="product in listOfFoodItems.items">
+       <li>Buy {{product.quantity}} {{product.name}}
+         <button class="btn btn-default" ng-click="listOfFoodItems.addToBasket($index)">
+           <span class="glyphicon glyphicon-ok"></span>Bought</button>
+      </li>
+     </ul>
+     <div class="emptyMessage" ng-show="listOfFoodItems.items.length == 0">Everything is bought!</div>
     </div>
-  </body>
+      <div class="col-md-6" ng-controller="basket as basketOfProd">
+           <h2>Already Bought:</h2>
+           <ul ng-repeat="basketItems in basketOfProd.items">
+             <li>Bought {{basketItems.quantity}} {{basketItems.name}}</li>
+           </ul>
+           <div class="emptyMessage" ng-show="!basketOfProd.items.length">{{basketOfProd.msg}}</div>
+      </div>
+  </div>
+</div>
+</body>
 </html>
