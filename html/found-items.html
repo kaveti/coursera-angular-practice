@@ -1,0 +1,7 @@
+<ul ng-repeat="it in search.items" ng-if="search.ready">
+    <li>
+        name = {{it.name}}, shortname = {{it.short_name}}, desc = {{it.description}}
+        <button class="btn btn-primary" ng-click="search.removeItem($index)">Don't want this one!</button>
+    </li>
+</ul>
+<div ng-if="search.error" class="error">{{search.message}}</div>

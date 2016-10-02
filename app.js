@@ -1,71 +1,77 @@
 (
-  function(){
-    angular.module('app',[]).
-    controller('products',products).
-    controller('basket',basket).
-    service('productsInvService',productsInv);
-    //   injecting scope object in listFood controller
-    products.$inject = ['productsInvService'];
-    function products(productsInvService){
-      var products = this;
-      products.items = productsInvService.getItems();
-      products.addToBasket = function(index){
-        productsInvService.addToBasket(index);
-      };
-    }
+    function() {
+        angular.module('app', []).
+        controller('searchController', searchController).
+        directive('foundItems', FoundItems).
+        constant('cfg', {
+            url: 'https://davids-restaurant.herokuapp.com/menu_items.json',
+            HttpTimeout: 5000
+        }).service('ItemRetrievalService', itemRetrievalService);
 
-    basket.$inject = ['productsInvService'];
-    function basket(productsInvService){
-      var basket = this;
-      basket.items = productsInvService.getBasketItems();
-      basket.msg = productsInvService.getMessage();
-    }
-
-  function productsInv(){
-      this.basket = [];
-      this.message = "Nothing bought yet.";
-      this.items = [
-          {
-             "name" : "cookies",
-             "quantity" : 10
-          },
-          {
-             "name" : "potato",
-             "quantity" : 12
-          },
-          {
-             "name" : "tomato",
-             "quantity" : 11
-          },
-          {
-             "name" : "ginger",
-             "quantity" : 1
-          },
-          {
-             "name" : "garlic",
-             "quantity" : 13
-          },
-          {
-             "name" : "biscuits",
-             "quantity" : 5
-          }
-      ];
-      this.getItems = function(){
-                          return this.items;
-                  }
-      this.getMessage = function(){
-                          return this.message;
-                  }
-      this.addToBasket = function(index){
-                   if(this.items.length >= 0){
-                     var item = this.items.splice(index,1);
-                     this.basket.push(item[0]);
-                     this.message = "";
-                   }
-              }
-        this.getBasketItems = function(){
-              return this.basket;
+        function FoundItems() {
+            var ddo = {
+                require: 'E',
+                templateUrl: 'html/found-items.html'
+            };
+            return ddo;
         }
-      }
-}
+
+        itemRetrievalService.$inject = ['$http', 'cfg'];
+
+        function itemRetrievalService($http, cfg) {
+            var ItemService = this;
+            ItemService.getItems = function() {
+                return $http.get(cfg.url, cfg.HttpTimeout);
+            };
+        }
+
+        searchController.$inject = ['ItemRetrievalService'];
+
+        function searchController(ItemRetrievalService) {
+            var search = this;
+            search.error = false;
+            search.message = "";
+            search.items = [];
+            search.ready = false;
+            search.removeItem = function removeItem(index) {
+                search.items.splice(index, 1);
+            };
+
+            // can move this logic to service
+            search.searchItem = function searchItem() {
+                search.ready = false;
+                search.error = false;
+                search.items = [];
+                ItemRetrievalService.getItems().then(successCALLBack, error);
+            };
+
+            function successCALLBack(response) {
+                if (response.data !== 'undefined' && response.data.menu_items !== 'undefined') {
+                    for (var i = 0; i < response.data.menu_items.length; i++) {
+                        if (ItemFilter(response.data.menu_items[i])) {
+                            search.items.push(response.data.menu_items[i]);
+                        }
+                    }
+                }
+                if (search.items.length === 0) {
+                    error();
+                }
+                search.ready = true;
+            }
+
+            function error() {
+                search.ready = true;
+                search.error = true;
+                search.message = "Nothing Found!";
+            }
+
+            function ItemFilter(data) {
+                if (data !== 'undefined' && data.name.indexOf(search.item) !== -1) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }
+    }
 )();

@@ -1,54 +1,31 @@
 <!doctype html>
-<html lang="en"  ng-app="app">
-  <head>
-    <title>Shopping List Check Off</title>
+<html lang="en" ng-app="app">
+
+<head>
+    <title>Narrow Down Your Menu Choice</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="styles/bootstrap.min.css">
+    <link rel="stylesheet" href="styles/styles.css">
     <script src="angular.min.js"></script>
     <script src="app.js"></script>
-    <style>
-      .emptyMessage {
-        font-weight: bold;
-        color: red;
-        font-size: 1.2em;
-      }
-      li {
-        margin-bottom: 7px;
-        font-size: 1.2em;
-      }
-      li > button {
-        margin-left: 6px;
-      }
-      button > span {
-        color: green;
-      }
-    </style>
-  </head>
+</head>
+
 <body>
-  <div class="container">
-  <h1>Shopping List Check Off</h1>
-
-  <div class="row">
-
-    <!-- To Buy List -->
-    <div class="col-md-6" ng-controller="products as listOfFoodItems">
-     <h2>To Buy:</h2>
-     <ul ng-repeat="product in listOfFoodItems.items">
-       <li>Buy {{product.quantity}} {{product.name}}
-         <button class="btn btn-default" ng-click="listOfFoodItems.addToBasket($index)">
-           <span class="glyphicon glyphicon-ok"></span>Bought</button>
-      </li>
-     </ul>
-     <div class="emptyMessage" ng-show="listOfFoodItems.items.length == 0">Everything is bought!</div>
+    <div ng-controller="searchController as search">
+        <div class="container">
+            <h1>Narrow Down Your Chinese Menu Choice</h1>
+            <div class="form-group">
+                <input type="text" placeholder="search term" class="form-control" ng-model="search.item">
+            </div>
+            <div class="form-group narrow-button">
+                <button class="btn btn-primary" ng-click="search.searchItem()">Narrow It Down For Me!</button>
+            </div>
+        </div>
+        <div class="container">
+            <found-items items="search.items" on-remove="search.removeItem(item)">
+            </found-items>
+        </div>
     </div>
-      <div class="col-md-6" ng-controller="basket as basketOfProd">
-           <h2>Already Bought:</h2>
-           <ul ng-repeat="basketItems in basketOfProd.items">
-             <li>Bought {{basketItems.quantity}} {{basketItems.name}}</li>
-           </ul>
-           <div class="emptyMessage" ng-show="!basketOfProd.items.length">{{basketOfProd.msg}}</div>
-      </div>
-  </div>
-</div>
 </body>
+
 </html>
