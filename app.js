@@ -69,7 +69,7 @@
             }
 
             function ItemFilter(data) {
-                if (data !== 'undefined' && data.name.indexOf(search.item) !== -1) {
+                if (data !== 'undefined' && data.description.indexOf(search.item) !== -1) {
                     return true;
                 } else {
                     return false;
