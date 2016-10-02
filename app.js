@@ -57,11 +57,14 @@
                     error();
                 }
                 search.ready = true;
+                search.item = undefined;
             }
 
             function error() {
                 search.ready = true;
                 search.error = true;
+                search.items = [];
+                search.item = undefined;
                 search.message = "Nothing Found!";
             }
 
