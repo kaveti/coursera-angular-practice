@@ -21,8 +21,9 @@
                 <button class="btn btn-primary" ng-click="search.searchItem()">Narrow It Down For Me!</button>
             </div>
         </div>
-        <div class="container">
-            <found-items items="search.items" on-remove="search.removeItem(item)">
+        <div class="container" ng-if="search.ready">
+
+            <found-items message="{{search.message}}" error="{{search.error}}" items="search.items" on-remove="search.removeItem(item)">
             </found-items>
         </div>
     </div>

@@ -11,7 +11,13 @@
         function FoundItems() {
             var ddo = {
                 require: 'E',
-                templateUrl: 'html/found-items.html'
+                templateUrl: 'html/found-items.html',
+                scope: {
+                    onRemove: '&',
+                    message: '@message',
+                    error: '@error',
+                    items: '=items'
+                }
             };
             return ddo;
         }
