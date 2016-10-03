@@ -1,7 +1,7 @@
 <ul ng-repeat="it in items">
     <li>
         {{it.name}}, {{it.short_name}}, {{it.description}}
-        <button class="btn btn-primary" ng-click="removeItem({'item':$index})">Don't want this one!</button>
+        <button class="btn btn-primary" ng-click="onRemove({'item':$index})">Don't want this one!</button>
     </li>
 </ul>
 <div ng-show="{{error}}" class="error">{{message}}</div>

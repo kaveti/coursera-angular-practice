@@ -13,7 +13,7 @@
                 require: 'E',
                 templateUrl: 'html/found-items.html',
                 scope: {
-                    onRemove: '&',
+                    onRemove: '&onRemove',
                     message: '@message',
                     error: '@error',
                     items: '=items'
